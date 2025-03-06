@@ -17,6 +17,7 @@ func main() {
 	scanner.Scan()
 
 	for {
+		// Binary search log(n)
 		guess := (low + high) / 2
 		fmt.Println("I guess the number is ", guess)
 		fmt.Println("Is that:")
