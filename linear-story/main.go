@@ -9,12 +9,34 @@ type storyPage struct {
 	nextPage *storyPage
 }
 
-func playStory(page *storyPage) {
-	fmt.Println(page.text)
-	if page.nextPage == nil {
-		return
+func (page *storyPage) addToEnd(text string) *storyPage {
+	for page.nextPage != nil {
+		page = page.nextPage
 	}
-	playStory(page.nextPage)
+
+	page.nextPage = &storyPage{
+		text:     text,
+		nextPage: nil,
+	}
+
+	return page.nextPage
+}
+
+func (page *storyPage) insertAfter(text string) *storyPage {
+	newPage := &storyPage{
+		text:     text,
+		nextPage: page.nextPage,
+	}
+	page.nextPage = newPage
+
+	return newPage
+}
+
+func (page *storyPage) playStory() {
+	for page != nil {
+		fmt.Println(page.text)
+		page = page.nextPage
+	}
 }
 
 func main() {
@@ -23,17 +45,11 @@ func main() {
 		text:     "It's a dark and stormy night.",
 		nextPage: nil,
 	}
-	page2 := storyPage{
-		text:     "You are alone outdoors, and you need to find some shelter.",
-		nextPage: nil,
-	}
-	page3 := storyPage{
-		text:     "You see a light ahead.",
-		nextPage: nil,
-	}
+	page2 := page1.addToEnd("You are alone outdoors, and you need to find some shelter.")
+	page3 := page1.addToEnd("You see a light ahead.")
 
-	page1.nextPage = &page2
-	page2.nextPage = &page3
-
-	playStory(&page1)
+	page2Insert := page2.insertAfter("page2InsertAfter")
+	page2Insert.insertAfter("page2InsertAfterInsertAfter lol")
+	page3.insertAfter("page3InsertAfter")
+	page1.playStory()
 }
